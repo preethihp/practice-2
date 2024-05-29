@@ -6,8 +6,21 @@ document.getElementById("restform").addEventListener("submit",function(e){
     const table = document.getElementById("table").value;
 
     const order = {amount, item, table}
+    function displayitems() { 
+        axios.get("https://crudcrud.com/api/ff089c5340d74b6fbc7fb3d01ecce1b8/order",
+            order
+        )
+        .then((res)=>{
+            displayOrders(res.data);
+        })
+        .catch((error)=>{
+            console.log(error);
+        })
+    }
+    displayitems();
 
-    axios.post("https://crudcrud.com/api/75c3688c406944248cff48b67d7aff69/order",
+
+    axios.post("https://crudcrud.com/api/ff089c5340d74b6fbc7fb3d01ecce1b8/order",
         order
     )
     .then((res)=>{
@@ -33,7 +46,7 @@ function displayOrders(order){
     deleteButton.textContent="Delete";
     deleteButton.addEventListener("click", function(e){
         e.preventDefault();
-        axios.delete(`https://crudcrud.com/api/75c3688c406944248cff48b67d7aff69/order/${order._id}`)
+        axios.delete(`https://crudcrud.com/api/ff089c5340d74b6fbc7fb3d01ecce1b8/order/${order._id}`)
         .then((res)=>{
             li.remove();
         })
@@ -47,4 +60,5 @@ function displayOrders(order){
 
 
 }
+
 
