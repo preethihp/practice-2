@@ -19,6 +19,8 @@ exports.getMessage = ((req,res)=>{
         }
         
         res.sendFile(path.join(__dirname,'../','views','message.html'));
+        //res.send(data);
+
     });
 });
 
@@ -40,3 +42,14 @@ exports.postContact = ((req, res) => {
     res.send("<h1>Form successfuly filled</h1>");
     res.redirect('/');
 });
+
+exports.getUserProfile = (req, res) => {
+    const userId = req.params.userId;
+    
+    const userData = {
+        id: userId,
+        name: `User ${userId}`,
+        // email: `user${userId}@example.com`
+    };
+    res.json(userData);
+};

@@ -3,10 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 const errorController = require('./controllers/error');
-
-const loginRoutes = require('./routes/login');
-const messageRoutes = require('./routes/message');
-const contactusRouter = require('./routes/contactus');
+const routes = require('./routes/routes');
 
 const app = express();
 
@@ -15,9 +12,8 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname,'public')));
 
 
-app.use('/login',loginRoutes);
-app.use('/',messageRoutes);
-app.use('/',contactusRouter);
+app.use(routes);
+
 
 app.use(errorController.error404);
 
