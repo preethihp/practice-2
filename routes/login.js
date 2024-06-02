@@ -1,13 +1,11 @@
 const express = require('express');
+const path = require('path');
+
 const app = express.Router();
 
+
 app.get('/', (req, res) => {
-    res.send(`
-        <form onsubmit="localStorage.setItem('username', document.getElementById('username').value)" action="/login" method="POST">
-            <input id="username" type="text" name="username" placeholder="Enter Username">
-            <button type="submit">Login</button>
-        </form>
-    `);
+    res.sendFile(path.join(__dirname, '../','views','login.html'));
 });
 
 app.post('/', (req, res) => {
