@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="/css/message.css">
 </head>
 <body>
-    
+    <nav>
+        <a href="/contactus">Contact Us</a>
+    </nav>
     <form onsubmit="document.getElementById('username').value=localStorage.getItem('username')" action="/" method="POST">
         <input id="message" type="text" name="message" placeholder="Enter message">
         <input type="hidden" name="username" id="username">
