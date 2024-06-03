@@ -1,18 +1,38 @@
-const fs = require('fs');
-const path = require('path');
+const mysql = require('mysql2');
 
-const messagesFilePath = path.join(__dirname, '../data', 'message.txt');
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'preethi',
+    database: 'group-chat'
+});
+
+
+db.connect((err) => {
+    if (err) {
+        console.error('Error connecting to the database:', err.stack);
+        return;
+    }
+    console.log('Connected to the database as id ' + db.threadId);
+});
 
 exports.appendMessage = (username, message, callback) => {
-    const newMessage = `${username} : ${message}  `;
-    fs.appendFile(messagesFilePath, newMessage, callback);
+    const query = 'INSERT INTO message (username, messages) VALUES (?, ?)';
+    db.query(query, [username, message], (err, results) => {
+        if (err) {
+            return callback(err);
+        }
+        callback(null, results);
+    });
 };
 
+
 exports.getMessages = (callback) => {
-    fs.readFile(messagesFilePath, 'utf8', (err, data) => {
+    const query = 'SELECT * FROM message';
+    db.query(query, (err, results) => {
         if (err) {
             return callback(err, null);
         }
-        callback(null, data);
+        callback(null, results);
     });
 };
