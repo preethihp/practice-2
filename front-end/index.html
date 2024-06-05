@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Database Management</title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+<div class="container">
+    <h1>Database Management</h1>
+    <div id="createTableForm" style="display:none;">
+        <h2>Create Table</h2>
+        <input type="text" id="tableName" placeholder="Table Name" required>
+        <div id="columnsContainer">
+            <div class="column-row">
+                <input type="text" class="columnName" placeholder="Column Name" required>
+                <select class="columnType">
+                    <option value="INT">INT</option>
+                    <option value="VARCHAR(255)">VARCHAR(255)</option>
+                    <option value="DATE">DATE</option>
+                    <option value="BOOLEAN">BOOLEAN</option>
+                </select>
+            </div>
+        </div>
+        <button id="addColumnBtn">Add Column</button>
+        <button id="submitCreateTableBtn">Submit</button>
+    </div>
+    <div id="insertDataForm" style="display:none;">
+        <h2>Insert Data</h2>
+        <form id="dataForm"></form>
+        <button id="submitDataBtn">Submit</button>
+    </div>
+    <div id="tableDataContainer" style="display:none;">
+        <h2>Table Data</h2>
+        <table>
+            <thead id="tableHeaders"></thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+    <div id="tablesList">
+        <h2>Tables</h2>
+        <ul></ul>
+    </div>
+    <button id="createTableBtn">Create Table</button>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
