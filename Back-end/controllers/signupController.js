@@ -21,3 +21,20 @@ exports.signup = (req, res) => {
             res.status(500).json({ error: 'An error occurred' });
         });
 };
+
+exports.login = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const [users] = await User.findByEmail(email);
+
+        if (users.length === 0 || users[0].password !== password) {
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
+
+        res.status(200).json({ message: 'Login successful' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred' });
+    }
+};
