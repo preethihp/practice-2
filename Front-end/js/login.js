@@ -4,18 +4,28 @@ async function handleLogin(event) {
     const password = document.getElementById('password').value;
 
     try {
-        const response = await axios.post('http://localhost:3000/login', {
-            email,
-            password
-        });
+        const response = await axios.post('http://localhost:3000/login', { email, password });
 
         if (response.status === 200) {
-            alert('Login successful');
-            
+            alert(response.data.message);
         } else {
-            alert('Login failed');
+            alert(response.data.error);
         }
     } catch (error) {
-        alert('Error logging in');
+        if (error.response) {
+           
+            if (error.response.status === 401) {
+                alert('Unauthorized: Incorrect password');
+            } else if (error.response.status === 404) {
+                alert('Error: User not found');
+            } else {
+                alert(`Error: ${error.response.data.error}`);
+            }
+        } else {
+            
+            alert('An error occurred during login');
+        }
     }
 }
+
+

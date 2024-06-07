@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const User = require('../models/signupModel');
 
 exports.signup = (req, res) => {
@@ -9,7 +10,10 @@ exports.signup = (req, res) => {
                 return res.status(400).json({ error: 'User already exists' });
             }
 
-            const user = new User(null, name, email, password);
+            return bcrypt.hash(password, 10);
+        })
+        .then((hashedPassword) => {
+            const user = new User(null, name, email, hashedPassword);
             return user.save();
         })
         .then(() => {
@@ -28,13 +32,24 @@ exports.login = async (req, res) => {
     try {
         const [users] = await User.findByEmail(email);
 
-        if (users.length === 0 || users[0].password !== password) {
-            return res.status(401).json({ error: 'Invalid email or password' });
+        if (users.length === 0) {
+            console.log('User not found');
+            return res.status(404).json({ error: 'User not found' });
         }
 
-        res.status(200).json({ message: 'Login successful' });
+        console.log('User found, checking password...');
+        
+        const isMatch = await bcrypt.compare(password, users[0].password);
+
+        if (!isMatch) {
+            console.log('Password does not match');
+            return res.status(401).json({ error: 'User not authorized', reason: 'Incorrect password' });
+        }
+
+        console.log('User login successful');
+        res.status(200).json({ message: 'User login successful' });
     } catch (error) {
-        console.error(error);
+        console.error('An error occurred:', error);
         res.status(500).json({ error: 'An error occurred' });
     }
 };
