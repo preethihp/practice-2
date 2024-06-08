@@ -1,0 +1,12 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+#expense-form-container {
+    margin-top: 20px;
+}
+
+#expense-list {
+    margin-top: 20px;
+}

@@ -1,5 +1,5 @@
-const bcrypt = require('bcrypt');
 const User = require('../models/signupModel');
+const bcrypt = require('bcrypt');
 
 exports.signup = (req, res) => {
     const { name, email, password } = req.body;
@@ -10,9 +10,7 @@ exports.signup = (req, res) => {
                 return res.status(400).json({ error: 'User already exists' });
             }
 
-            return bcrypt.hash(password, 10);
-        })
-        .then((hashedPassword) => {
+            const hashedPassword = bcrypt.hashSync(password, 12);
             const user = new User(null, name, email, hashedPassword);
             return user.save();
         })
@@ -37,17 +35,25 @@ exports.login = async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        console.log('User found, checking password...');
-        
-        const isMatch = await bcrypt.compare(password, users[0].password);
+        const user = users[0];
+        const isMatch = bcrypt.compareSync(password, user.password);
 
         if (!isMatch) {
             console.log('Password does not match');
             return res.status(401).json({ error: 'User not authorized', reason: 'Incorrect password' });
         }
 
-        console.log('User login successful');
-        res.status(200).json({ message: 'User login successful' });
+        req.session.isLoggedIn = true;
+        req.session.user = user;
+        req.session.save(err => {
+            if (err) {
+                console.log(err);
+                return res.status(500).json({ error: 'An error occurred' });
+            }
+
+            console.log('User login successful');
+            res.status(200).json({ message: 'User login successful' });
+        });
     } catch (error) {
         console.error('An error occurred:', error);
         res.status(500).json({ error: 'An error occurred' });

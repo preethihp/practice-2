@@ -5,11 +5,9 @@ async function handleSignup(event) {
     const password = document.getElementById('password').value;
 
     try {
-        const response = await axios.post('http://localhost:3000/signup', {
-            name,
-            email,
-            password
-        });
+        const response = await axios.post('http://localhost:3000/signup', 
+        { name, email, password }, 
+        { withCredentials: true });
 
         if (response.status === 201) {
             alert(response.data.message);
