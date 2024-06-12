@@ -11,6 +11,7 @@ async function handleSignup(event) {
 
         if (response.status === 201) {
             alert(response.data.message);
+            window.location.href = 'login.html';
         } else {
             alert(response.data.error);
         }

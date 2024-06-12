@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const userRouter = require('./routes/signupRoutes');
 const expenseRouter = require('./routes/expenseRouter');
+const sequelize = require('./util/database');
 
 const app = express();
 
@@ -14,20 +15,24 @@ app.use(cors({
 }));
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(session({
-    secret: 'your_secret_key',
+    secret: 'secret_key',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } 
+    cookie: { secure: false }
 }));
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
-});
 
 app.use('/', userRouter);
 app.use('/expenses', expenseRouter);
 
-app.listen(3000);
+sequelize.sync()
+    .then(result => {
+        console.log(result);
+        app.listen(3000);
+    })
+    .catch(err => {
+        console.log(err);
+    });
+

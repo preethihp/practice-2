@@ -1,27 +1,34 @@
-const db = require('../util/database');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../util/database');
+const User = require('./signupModel');
 
-class Expense {
-    constructor(id, amount, description, category) {
-        this.id = id;
-        this.amount = amount;
-        this.description = description;
-        this.category = category;
+const Expense = sequelize.define('Expense', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    amount: {
+        type: DataTypes.FLOAT,
+        allowNull: false
+    },
+    description: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    category: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    userId:{
+        type:DataTypes.INTEGER,
+        
     }
 
-    save() {
-        return db.execute(
-            'INSERT INTO expenses (amount, description, category) VALUES (?, ?, ?)',
-            [this.amount, this.description, this.category]
-        );
-    }
+    
+});
 
-    static findAll() {
-        return db.execute('SELECT * FROM expenses');
-    }
-
-    static deleteById(id) {
-        return db.execute('DELETE FROM expenses WHERE id = ?', [id]);
-    }
-}
+User.hasMany(Expense);
+Expense.belongsTo(User);
 
 module.exports = Expense;

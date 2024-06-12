@@ -1,20 +1,10 @@
 const express = require('express');
-
 const router = express.Router();
-
 const expenseController = require('../controllers/expenseController');
+const { authenticateToken } = require('../middleware/authentication');
 
-// function ensureAuthenticated(req, res, next) {
-//     if (req.session.user) {
-//       next();
-//     } else {
-//       res.status(401).send('Unauthorized');
-//     }
-//   }
+router.post('/', authenticateToken, expenseController.addExpense);
+router.get('/', authenticateToken, expenseController.getExpense);
+router.delete('/:id', authenticateToken, expenseController.deleteExpense);
 
-router.post('/',expenseController.addExpense);
-router.get('/', expenseController.getExpense);
-router.delete('/:id', expenseController.deleteExpense);
-
-module.exports=router;
-
+module.exports = router;

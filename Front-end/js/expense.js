@@ -1,11 +1,16 @@
-document.addEventListener('DOMContentLoaded', async() => {
+document.addEventListener('DOMContentLoaded', async () => {
     const expenseForm = document.getElementById('expense-form');
     const expenseList = document.getElementById('expense-list');
     const expenseFormContainer = document.getElementById('expense-form-container');
 
-    if (sessionStorage.getItem('isLoggedIn') === 'true') {
+    const token = sessionStorage.getItem('token');
+
+    if (token) {
         expenseFormContainer.style.display = 'block';
-        await loadExpenses();
+        await loadExpenses(token);
+    } else {
+        alert('You are not logged in.');
+        window.location.href = 'login.html';
     }
 
     expenseForm.addEventListener('submit', async (event) => {
@@ -15,49 +20,69 @@ document.addEventListener('DOMContentLoaded', async() => {
         const description = document.getElementById('description').value;
         const category = document.getElementById('category').value;
 
-        const expense = { amount, description, category };
-
         try {
             const response = await axios.post('http://localhost:3000/expenses', 
-            expense, 
-            { withCredentials: true });
-            console.log('Expense added:', response.data);
-            displayExpense(response.data);
-        } catch (error) {
-            console.error('Error adding expense:', error);
-            if (error.response) {
-                console.error('Response data:', error.response.data);
+            { amount, description, category }, 
+            { headers: { 'Authorization': `Bearer ${token}` } });
+
+            if (response.status === 201) {
+                addExpenseToList(response.data);
+                expenseForm.reset();
+            } else {
+                alert('Error adding expense');
             }
-        }
-
-        expenseForm.reset();
-    });
-
-    async function loadExpenses() {
-        try {
-            const response = await axios.get('http://localhost:3000/expenses', { withCredentials: true });
-            response.data.forEach(expense => displayExpense(expense));
         } catch (error) {
-            console.error('Error loading expenses:', error);
+            alert('An error occurred while adding expense');
         }
-    }
-
-    function displayExpense(expense) {
-        const expenseItem = document.createElement('div');
-        expenseItem.innerHTML = `
-            <p>${expense.amount} - ${expense.description} - ${expense.category}</p>
-            <button onclick="deleteExpense(${expense.id})">Delete</button>
-        `;
-        expenseList.appendChild(expenseItem);
-    }
+    });
 });
 
-async function deleteExpense(id) {
+async function loadExpenses(token) {
     try {
-        const response = await axios.delete(`http://localhost:3000/expenses/${id}`, { withCredentials: true });
-        console.log('Expense deleted:', response.data);
-        location.reload();
+        const response = await axios.get('http://localhost:3000/expenses', 
+        { headers: { 'Authorization': `Bearer ${token}` } });
+
+        if (response.status === 200) {
+            const expenses = response.data;
+            expenses.forEach(expense => addExpenseToList(expense));
+        } else {
+            alert('Error loading expenses');
+        }
     } catch (error) {
-        console.error('Error deleting expense:', error);
+        alert('An error occurred while loading expenses');
+    }
+}
+
+function addExpenseToList(expense) {
+    const expenseList = document.getElementById('expense-list');
+
+    const expenseItem = document.createElement('div');
+    expenseItem.classList.add('expense-item');
+    expenseItem.dataset.id = expense.id;
+
+    expenseItem.innerHTML = `
+        <span>${expense.amount}</span>
+        <span>${expense.description}</span>
+        <span>${expense.category}</span>
+        <button onclick="deleteExpense(${expense.id})">Delete</button>
+    `;
+
+    expenseList.appendChild(expenseItem);
+}
+
+async function deleteExpense(id) {
+    const token = sessionStorage.getItem('token');
+    try {
+        const response = await axios.delete(`http://localhost:3000/expenses/${id}`, 
+        { headers: { 'Authorization': `Bearer ${token}` } });
+
+        if (response.status === 200) {
+            const expenseItem = document.querySelector(`.expense-item[data-id='${id}']`);
+            expenseItem.remove();
+        } else {
+            alert('Error deleting expense');
+        }
+    } catch (error) {
+        alert('An error occurred while deleting expense');
     }
 }
