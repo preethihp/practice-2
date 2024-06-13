@@ -6,6 +6,7 @@ const cors = require('cors');
 const userRouter = require('./routes/signupRoutes');
 const expenseRouter = require('./routes/expenseRouter');
 const sequelize = require('./util/database');
+const purchaseRouter = require('./routes/purchaseRouter');
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(session({
     cookie: { secure: false }
 }));
 
+app.use('/purchase', purchaseRouter);
 app.use('/', userRouter);
 app.use('/expenses', expenseRouter);
 
@@ -35,4 +37,3 @@ sequelize.sync()
     .catch(err => {
         console.log(err);
     });
-

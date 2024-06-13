@@ -1,17 +1,10 @@
 const Expense = require('../models/expenseModel');
-const jwt = require('jsonwebtoken');
 
 exports.addExpense = async (req, res) => {
     try {
-        const token = req.headers.authorization.split(' ')[1];
-        console.log(token)
-        const decodedToken = jwt.verify(token, 'secret_key');
-        console.log(decodedToken)
-        const userId = decodedToken.id;
-
+        const userId = req.user.id;
         const { amount, description, category } = req.body;
         const newExpense = await Expense.create({ amount, description, category, userId });
-
         res.status(201).json(newExpense);
     } catch (error) {
         console.error('Error adding expense:', error);
@@ -42,8 +35,7 @@ exports.deleteExpense = async (req, res) => {
 
         await expense.destroy();
         res.status(200).json({ message: 'Expense deleted successfully' });
-    } 
-    catch (error) {
+    } catch (error) {
         console.error('Error deleting expense:', error);
         res.status(500).json({ error: 'An error occurred' });
     }

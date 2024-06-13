@@ -79,6 +79,7 @@ async function deleteExpense(id) {
         if (response.status === 200) {
             const expenseItem = document.querySelector(`.expense-item[data-id='${id}']`);
             expenseItem.remove();
+            alert("Successfully deleted");
         } else {
             alert('Error deleting expense');
         }
@@ -86,3 +87,5 @@ async function deleteExpense(id) {
         alert('An error occurred while deleting expense');
     }
 }
+
+   

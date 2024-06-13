@@ -8,6 +8,7 @@ async function handleLogin(event) {
 
         if (response.status === 200) {
             sessionStorage.setItem('token', response.data.token);
+            alert('Login successful');
             window.location.href = 'expense.html';
         } else {
             alert(response.data.error);
