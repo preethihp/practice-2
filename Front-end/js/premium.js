@@ -11,7 +11,12 @@ document.getElementById("rzp-button").onclick = async function(e) {
                 order_id: options.order_id,
                 payment_id: response.razorpay_payment_id
             }, { headers: { "Authorization": `Bearer ${token}` } });
-            alert("You are a premium user now");
+            
+                localStorage.setItem('isPremiumUser', 'true');
+                document.getElementById('premium-message').innerText = 'You are a premium user now'; 
+                document.getElementById("rzp-button").style.visibility="hidden";
+                alert("You are a premium user now");
+            
         }
     };
 

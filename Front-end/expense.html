@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="css/expense.css">
 </head>
 <body>
+    <div id="premium_message"></div>
+    <button id="rzp-button">Buy Premium Membership</button>
+    <button id="leaderboard-button" style="display: none;">View Leaderboard</button>
+    
     <div id="expense-form-container" style="display: none;">
         <form id="expense-form">
             <label for="amount">Amount Spent:</label>
@@ -28,7 +32,13 @@
 
         <div id="expense-list"></div>
     </div>
-    <button id="rzp-button" style="position: fixed; right: 20px; bottom: 20px;">Buy Premium Membership</button>
+    
+    
+    <div id="leaderboard" style="display: none;">
+        <h2>Leaderboard</h2>
+        <ul id="leaderboard-list"></ul>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>

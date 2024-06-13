@@ -7,6 +7,9 @@ const userRouter = require('./routes/signupRoutes');
 const expenseRouter = require('./routes/expenseRouter');
 const sequelize = require('./util/database');
 const purchaseRouter = require('./routes/purchaseRouter');
+const leaderRouter = require('./routes/leaderRouter');
+const forgotPasswordRoutes = require('./routes/forgotPasswordRouter');
+
 
 const app = express();
 
@@ -28,6 +31,8 @@ app.use(session({
 app.use('/purchase', purchaseRouter);
 app.use('/', userRouter);
 app.use('/expenses', expenseRouter);
+app.use('/', leaderRouter);
+app.use('/password', forgotPasswordRoutes);
 
 sequelize.sync()
     .then(result => {

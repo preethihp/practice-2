@@ -22,7 +22,7 @@ const Expense = sequelize.define('Expense', {
     },
     userId:{
         type:DataTypes.INTEGER,
-        allowNull: false // Ensure userId is not null
+        allowNull: false 
     }
 });
 

@@ -7,7 +7,9 @@ async function handleLogin(event) {
         const response = await axios.post('http://localhost:3000/login', { email, password });
 
         if (response.status === 200) {
-            sessionStorage.setItem('token', response.data.token);
+            const { token, isPremiumUser } = response.data;
+            sessionStorage.setItem('token', token);
+            localStorage.setItem('isPremiumUser', isPremiumUser); // Store premium status in local storage
             alert('Login successful');
             window.location.href = 'expense.html';
         } else {

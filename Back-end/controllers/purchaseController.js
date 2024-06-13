@@ -34,21 +34,20 @@ exports.update = async (req, res) => {
             throw new Error('Order not found');
         }
 
- 
         const user = await User.findByPk(req.user.id);
 
-        
         await Promise.all([
             order.update({ paymentid: payment_id, status: "SUCCESSFUL" }),
             user.update({ ispremiumuser: true })
         ]);
 
-        return res.status(202).json({ success: true, message: "Transaction Successful" });
+        return res.status(202).json({ success: true, message: "Transaction Successful", isPremiumUser: true });
     } catch (err) {
         console.log(err);
         res.status(403).json({ message: "Something went wrong", error: err });
     }
 };
+
 
 
 exports.failure = async (req, res) => {
@@ -68,4 +67,3 @@ exports.failure = async (req, res) => {
         res.status(403).json({ message: "Something went wrong", error: err });
     }
 };
-
