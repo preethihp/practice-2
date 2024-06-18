@@ -28,18 +28,19 @@ exports.getMessages = async (req, res) => {
       include: [
         {
           model: User,
-          as: 'sender',
-          attributes: ['id', 'name'],
+          as: 'sender', // This is the alias for the association
+          attributes: ['id', 'name'], // Include only id and name of the sender
         },
       ],
       order: [['createdAt', 'ASC']],
       limit: 10,
     });
 
+    // Format the messages to include senderName along with other message data
     const formattedMessages = messages.map(msg => ({
       id: msg.id,
       senderId: msg.senderId,
-      senderName: msg.sender.name,
+      senderName: msg.sender.name, // Get the sender's name from the included user model
       receiverId: msg.receiverId,
       message: msg.message,
       createdAt: msg.createdAt,
@@ -51,7 +52,6 @@ exports.getMessages = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-
 exports.sendMessage = async (req, res) => {
   const { senderId, receiverId, message } = req.body;
   if (!senderId || !receiverId || !message) {

@@ -1,11 +1,17 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../util/database');
+const User = require('./user');
 
-const Groupchat = sequelize.define('Groupchat', {
+
+const GroupMessage = sequelize.define('GroupMessage', {
   id: {
     type: DataTypes.INTEGER,
-    autoIncrement: true,
     primaryKey: true,
+    autoIncrement: true,
+  },
+  groupId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   senderId: {
     type: DataTypes.INTEGER,
@@ -14,12 +20,10 @@ const Groupchat = sequelize.define('Groupchat', {
   message: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  groupId: {
-    type: DataTypes.INTEGER
   }
-}, {
-  timestamps: true,
 });
 
-module.exports = Groupchat;
+GroupMessage.belongsTo(User, { foreignKey: 'senderId', as: 'sender'  });
+
+
+module.exports = GroupMessage;

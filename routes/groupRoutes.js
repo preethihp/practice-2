@@ -1,11 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const groupController = require('../controllers/groupController');
-const { verifyToken } = require('../middleware/auth');
+const groupMessageController = require('../controllers/groupMessageController');
+const {verifyToken} = require('../middleware/auth');
 
-router.post('/create', verifyToken, groupController.createGroup);
-router.post('/:groupId/members', verifyToken, groupController.addUserToGroup);
-router.get('/getUserGroups/:userId', verifyToken, groupController.getUserGroups);
-router.get('/:groupId/messages', verifyToken, groupController.getGroupMessages);
+// Group routes
+router.post('/create',verifyToken, groupController.createGroup);
+router.post('/addUser',verifyToken, groupController.addUserToGroup);
+router.get('/:groupId/users',verifyToken, groupController.getUsersInGroup);
+router.get('/:userId/groups',verifyToken, groupController.getUserGroups);
+
+// Group message routes
+router.post('/sendMessage',verifyToken, groupMessageController.sendMessageToGroup);
+router.get('/:groupId/messages',verifyToken, groupMessageController.getGroupMessages);
 
 module.exports = router;

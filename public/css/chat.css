@@ -132,3 +132,25 @@ body {
 .groups ul li:hover {
     background-color: #ddd;
 }
+
+/* Add this CSS to style the group users list */
+#group-users-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+#group-users-list li {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+#group-users-list li:last-child {
+    border-bottom: none;
+}
+
+#group-users-list li:hover {
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+

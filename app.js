@@ -4,8 +4,8 @@ const bodyParser = require('body-parser');
 
 const sequelize = require('./util/database');
 const authRoutes = require('./routes/authRoutes');
-const messageRoutes = require('./routes/messageRoutes');
 const groupRoutes = require('./routes/groupRoutes');
+const messageRoutes = require('./routes/messageRoutes');
 
 const app = express();
 
@@ -17,11 +17,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/api/auth', authRoutes);
+app.use('/groups', groupRoutes);
 app.use('/chat', messageRoutes);
-app.use('/api/groups', groupRoutes);
 
-sequelize.sync().then(() => {
+sequelize.sync()
+  .then(result => {
+    console.log('Database synced successfully');
+    // Start server
     app.listen(3000, () => {
-        console.log(`Server running on port 3000`);
+      console.log('Server is running on port 3000');
     });
-}).catch(err => console.log(err));
+  })
+  .catch(err => {
+    console.log('Error syncing database:', err);
+  });
