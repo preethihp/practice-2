@@ -1,5 +1,8 @@
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
 }
 
 .app {
@@ -8,7 +11,7 @@ body {
 }
 
 .sidebar {
-    width: 300px;
+    width: 200px;
     background-color: #f1f1f1;
     border-right: 1px solid #ddd;
     padding: 20px;
@@ -26,6 +29,7 @@ body {
 .sidebar ul li {
     padding: 10px;
     cursor: pointer;
+    border-bottom: 1px solid #ddd;
 }
 
 .sidebar ul li:hover {
@@ -36,18 +40,24 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
 }
 
 .chat-window h2 {
     margin-top: 0;
-    background-color: #eee;
+    background-color: #075e54;
+    color: white;
     padding: 10px;
     border-bottom: 1px solid #ddd;
+    width: 100%;
+    text-align: center;
 }
 
 .messages {
     flex: 1;
-    padding: 20px;
+    width: 100%;
     overflow-y: auto;
 }
 
@@ -55,7 +65,7 @@ body {
     padding: 10px;
     margin: 10px 0;
     border-radius: 10px;
-    max-width: 60%;
+    max-width: 70%;
 }
 
 .message.sent {
@@ -70,8 +80,10 @@ body {
 
 .message-input {
     display: flex;
+    width: 100%;
     padding: 10px;
     border-top: 1px solid #ddd;
+    box-sizing: border-box;
 }
 
 .message-input input {
@@ -89,4 +101,34 @@ body {
     color: white;
     border-radius: 20px;
     cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+
+.groups {
+    width: 200px;
+    background-color: #f1f1f1;
+    border-left: 1px solid #ddd;
+    padding: 20px;
+}
+
+.groups h2 {
+    margin-top: 0;
+}
+
+.groups ul {
+    list-style: none;
+    padding: 0;
+}
+
+.groups ul li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+}
+
+.groups ul li:hover {
+    background-color: #ddd;
 }

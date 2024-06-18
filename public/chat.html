@@ -20,8 +20,20 @@
                 <button id="send-button">Send</button>
             </div>
         </div>
+        <div class="groups">
+            <h2>Groups</h2>
+            <ul id="groups-list"></ul>
+            <input type="text" id="group-name-input" placeholder="Enter group name">
+            <button id="create-group-button">Create Group</button>
+            <div id="add-user-section" class="hidden">
+                <input type="text" id="add-user-input" placeholder="Enter user ID to add">
+                <button id="add-user-button">Add User to Group</button>
+            </div>
+        </div>
     </div>
-
+    
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="js/chat.js"></script>
+    <script src="js/group-chat.js"></script>
 </body>
 </html>

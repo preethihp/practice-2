@@ -1,30 +1,24 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../util/database');
+const User = require('./user');
 
-const User = sequelize.define('User', {
+const Group = sequelize.define('Group', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
+    allowNull: false
   },
   name: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
-  },
-  phone: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  password: {
-    type: DataTypes.STRING,
+  creatorId: {
+    type: DataTypes.INTEGER,
     allowNull: false
   }
 });
 
-module.exports = User;
+Group.belongsTo(User, { foreignKey: 'creatorId', as: 'creator' });
 
+module.exports = Group;

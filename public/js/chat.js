@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token') || '';
     const userId = localStorage.getItem('userId') || '';
-    const userName = localStorage.getItem('userName') || '';
     let selectedUser = null;
     let messages = [];
 
@@ -113,3 +112,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 1000);
 });
+

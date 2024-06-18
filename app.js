@@ -5,10 +5,9 @@ const bodyParser = require('body-parser');
 const sequelize = require('./util/database');
 const authRoutes = require('./routes/authRoutes');
 const messageRoutes = require('./routes/messageRoutes');
-
+const groupRoutes = require('./routes/groupRoutes');
 
 const app = express();
-
 
 app.use(cors({
     origin: 'http://127.0.0.1:5500',
@@ -19,7 +18,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/api/auth', authRoutes);
 app.use('/chat', messageRoutes);
-
+app.use('/api/groups', groupRoutes);
 
 sequelize.sync().then(() => {
     app.listen(3000, () => {

@@ -8,4 +8,3 @@ router.get('/messages',verifyToken, getMessages);
 router.post('/messages',verifyToken, sendMessage);
 
 module.exports = router;
-
