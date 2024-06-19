@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const userName = localStorage.getItem('userName') || '';
     let selectedGroup = null;
     let groupMessages = [];
+    let selectedGroupUsers = [];
 
     const groupsList = document.getElementById('groups-list');
     const groupMessagesDiv = document.getElementById('messages'); // Reuse the messages div for group messages
@@ -78,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(users => {
             if (Array.isArray(users)) {
+                selectedGroupUsers = users;
                 const usersList = document.getElementById('group-users-list');
                 usersList.innerHTML = '';
                 users.forEach(user => {
@@ -156,6 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('User not found');
                 return;
             }
+            const isUserInGroup = selectedGroupUsers.some(groupUser => groupUser.id === user.id);
+        if (isUserInGroup) {
+            alert('User is already in the group');
+            return;
+        }
     
             // Add user to the group using their user ID
             fetch('http://localhost:3000/groups/addUser', {
