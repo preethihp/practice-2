@@ -14,4 +14,7 @@ router.get('/:userId/groups',verifyToken, groupController.getUserGroups);
 router.post('/sendMessage',verifyToken, groupMessageController.sendMessageToGroup);
 router.get('/:groupId/messages',verifyToken, groupMessageController.getGroupMessages);
 
+router.get('/',verifyToken,  groupController.getUserByUsername);
+
+
 module.exports = router;

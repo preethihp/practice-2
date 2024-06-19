@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchGroupMessages(group.id);
         fetchGroupUsers(group.id); // Fetch and display users in the group
         // Show the chat window
-        //document.querySelector('.chat-window').style.display = 'block';
+        document.querySelector('.chat-window').style.display = 'block';
     }
     
     function fetchGroupUsers(groupId) {
@@ -143,27 +143,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addUserToGroup() {
-        const newUserId = addUserInput.value;
-        if (!newUserId || !selectedGroup) return;
-
-        fetch('http://localhost:3000/groups/addUser', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                groupId: selectedGroup.id,
-                userId: newUserId
-            })
+        const username = addUserInput.value;
+        if (!username || !selectedGroup) return;
+    
+        // Fetch the user by username
+        fetch(`http://localhost:3000/groups?username=${username}`, {
+            headers: { Authorization: `Bearer ${token}` }
         })
         .then(response => response.json())
-        .then(() => {
-            addUserInput.value = '';
-            console.log('User added to group');
+        .then(user => {
+            if (!user || !user.id) {
+                console.error('User not found');
+                return;
+            }
+    
+            // Add user to the group using their user ID
+            fetch('http://localhost:3000/groups/addUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    groupId: selectedGroup.id,
+                    username: username
+                })
+            })
+            .then(response => response.json())
+            .then(() => {
+                addUserInput.value = '';
+                console.log('User added to group');
+                alert("User added to group")
+                fetchGroupUsers(selectedGroup.id); // Refresh group users
+            })
+            .catch(error => console.error('Error adding user to group:', error));
         })
-        .catch(error => console.error('Error adding user to group:', error));
+        .catch(error => console.error('Error fetching user:', error));
     }
+    
+
+    
+    
 
     setInterval(() => {
         if (selectedGroup) {

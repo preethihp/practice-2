@@ -17,19 +17,25 @@ exports.createGroup = async (req, res) => {
 
 // Add a user to a group
 exports.addUserToGroup = async (req, res) => {
-    const { groupId, userId } = req.body;
-    if (!groupId || !userId) {
-      return res.status(400).json({ error: 'groupId and userId are required' });
-    }
-  
-    try {
-      const groupMember = await GroupMember.create({ groupId, userId });
+  const { groupId, username } = req.body;
+  if (!groupId || !username) {
+      return res.status(400).json({ error: 'groupId and username are required' });
+  }
+
+  try {
+      const user = await User.findOne({ where: { name: username } });
+      if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+      }
+
+      const groupMember = await GroupMember.create({ groupId, userId: user.id });
       res.status(201).json(groupMember);
-    } catch (error) {
+  } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Failed to add user to group' });
-    }
-  };
+  }
+};
+
 
 // Get all users in a group
 exports.getUsersInGroup = async (req, res) => {
@@ -65,4 +71,19 @@ exports.getUserGroups = async (req, res) => {
         console.error('Error fetching user groups:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
+};
+
+
+exports.getUserByUsername = async (req, res) => {
+  const { username } = req.query;
+  try {
+      const user = await User.findOne({ where: { name: username } });
+      if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+      }
+      res.status(200).json(user);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
 };
