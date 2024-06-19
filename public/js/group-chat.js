@@ -45,14 +45,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function createGroup() {
         const groupName = groupNameInput.value;
         if (!groupName) return;
-
+    
         fetch('http://localhost:3000/groups/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
             },
-            body: JSON.stringify({ name: groupName, createdBy: userId })
+            body: JSON.stringify({ name: groupName, createdBy: userId }) // Include createdBy property
         })
         .then(response => response.json())
         .then(group => {
@@ -70,6 +70,12 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchGroupUsers(group.id); // Fetch and display users in the group
         // Show the chat window
         document.querySelector('.chat-window').style.display = 'block';
+        
+        if (group.createdBy != userId) {
+            addUserSection.style.display = 'none'; // Hide the "Add user" section
+        } else {
+            addUserSection.style.display = 'block'; // Show the "Add user" section
+        }
     }
     
     function fetchGroupUsers(groupId) {
@@ -147,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function addUserToGroup() {
         const username = addUserInput.value;
         if (!username || !selectedGroup) return;
+
     
         // Fetch the user by username
         fetch(`http://localhost:3000/groups?username=${username}`, {
