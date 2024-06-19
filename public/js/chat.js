@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatHeader = document.getElementById('chat-header');
     const messageInput = document.getElementById('message-input');
     const sendButton = document.getElementById('send-button');
+    const fileInput = document.getElementById('file-input');
 
     if (token) {
         fetchUsers();
@@ -74,26 +75,37 @@ document.addEventListener('DOMContentLoaded', () => {
         messages.forEach(msg => {
             const div = document.createElement('div');
             div.classList.add('message', msg.senderId === userId ? 'sent' : 'received');
-            div.textContent = `${msg.senderName}: ${msg.message}`; // Display sender's name
+            if (msg.message) {
+                div.textContent = `${msg.senderName}: ${msg.message}`;
+            }
+            if (msg.filePath) {
+                const fileLink = document.createElement('a');
+                fileLink.href = msg.filePath;
+                fileLink.textContent = 'View File';
+                div.appendChild(fileLink);
+            }
             messagesDiv.appendChild(div);
         });
     }
 
     function sendMessage() {
         const message = messageInput.value;
-        if (!message) return;
+        const file = fileInput.files[0];
+
+        if (!message && !file) return;
+
+        const formData = new FormData();
+        formData.append('senderId', userId);
+        formData.append('receiverId', selectedUser.id);
+        formData.append('message', message);
+        formData.append('file', file);
 
         fetch('http://localhost:3000/chat/messages', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
             },
-            body: JSON.stringify({
-                senderId: userId,
-                receiverId: selectedUser.id,
-                message
-            })
+            body: formData
         })
         .then(response => response.json())
         .then(msg => {
@@ -103,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             updateMessages();
             messageInput.value = '';
+            fileInput.value = '';
         })
         .catch(error => console.error('Error sending message:', error));
     }

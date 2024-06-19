@@ -20,6 +20,7 @@ app.use('/api/auth', authRoutes);
 app.use('/groups', groupRoutes);
 app.use('/chat', messageRoutes);
 
+
 sequelize.sync()
   .then(result => {
     console.log('Database synced successfully');

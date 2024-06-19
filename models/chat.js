@@ -20,6 +20,10 @@ const Chat = sequelize.define('Chat', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  filePath: {
+    type: DataTypes.STRING,
+    allowNull: true
+}
 }, {
   timestamps: true,
 });
